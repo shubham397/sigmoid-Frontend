@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [dateRange, setDateRange] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [showLoader, setShowLoader] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -154,6 +155,7 @@ export default function Dashboard() {
   };
 
   const getPieData = () => {
+    setShowLoader(true);
     var myHeaders = new Headers();
     myHeaders.append("x-auth-token", cookies.get("token"));
     myHeaders.append("Content-Type", "application/json");
@@ -226,7 +228,10 @@ export default function Dashboard() {
           dispatch(allActions.dataActions.pie(result));
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log("error", error))
+      .finally(() => {
+        setShowLoader(false);
+      });
   };
 
   const getDateRange = () => {
@@ -283,57 +288,63 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="mainContainer">
-        <div className="subContainer">
-          <div className="calenderDiv">
-            <DateRangePicker
-              moveRangeOnFirstSelection={false}
-              ranges={[selectionRange]}
-              onChange={handleSelect}
+      {showLoader ? (
+        <div className="spinner-border text-primary" role="status">
+          <span className="sr-only"></span>
+        </div>
+      ) : (
+        <div className="mainContainer">
+          <div className="subContainer">
+            <div className="calenderDiv">
+              <DateRangePicker
+                moveRangeOnFirstSelection={false}
+                ranges={[selectionRange]}
+                onChange={handleSelect}
+              />
+            </div>
+            <div className="barData">
+              <BarChart width={400} height={200} data={barData}>
+                <Bar dataKey="impressions_offered" fill="#33aa22" />
+                <Tooltip />
+                <XAxis dataKey="appSiteId" fill="#8884d8" />
+                <YAxis />
+              </BarChart>
+            </div>
+            <div>
+              <PieChart width={400} height={300}>
+                <Pie
+                  dataKey="CM001"
+                  isAnimationActive={false}
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#22aa00"
+                  label
+                />
+                <Tooltip />
+              </PieChart>
+            </div>
+          </div>
+          <div className="tableData">
+            <MaterialTable
+              columns={[
+                { title: "Publisher Id", field: "publisherId" },
+                { title: "Impressions Offered", field: "impressions_offered" },
+              ]}
+              data={tableData}
+              title="Data"
+              options={{
+                sorting: true,
+                search: true,
+                maxBodyHeight: 300,
+                paginationType: "stepped",
+                showFirstLastPageButtons: false,
+              }}
             />
           </div>
-          <div className="barData">
-            <BarChart width={400} height={200} data={barData}>
-              <Bar dataKey="impressions_offered" fill="#33aa22" />
-              <Tooltip />
-              <XAxis dataKey="appSiteId" fill="#8884d8" />
-              <YAxis />
-            </BarChart>
-          </div>
-          <div>
-            <PieChart width={400} height={300}>
-              <Pie
-                dataKey="CM001"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#22aa00"
-                label
-              />
-              <Tooltip />
-            </PieChart>
-          </div>
         </div>
-        <div className="tableData">
-          <MaterialTable
-            columns={[
-              { title: "Publisher Id", field: "publisherId" },
-              { title: "Impressions Offered", field: "impressions_offered" },
-            ]}
-            data={tableData}
-            title="Data"
-            options={{
-              sorting: true,
-              search: true,
-              maxBodyHeight: 300,
-              paginationType: "stepped",
-              showFirstLastPageButtons: false,
-            }}
-          />
-        </div>
-      </div>
+      )}
     </>
   );
 }
