@@ -62,7 +62,7 @@ export default function Home() {
   if (signInData) {
     return (
       <>
-        <div className="Auth-form-container">
+        <div className="Auth-Dashboard-container">
           <Dashboard />
         </div>
       </>

@@ -11,6 +11,15 @@
   height: 100vh;
 }
 
+.Auth-Dashboard-container{
+  background-color: chocolate;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  padding-bottom: 50px;
+}
+
 .Auth-form {
   width: 420px;
   box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
@@ -165,7 +174,7 @@ input:checked + .slider:before {
 }
 
 .subContainer {
-  margin-top: 150px;
+  margin-top: 50px;
   margin-left: 50px;
   margin-bottom: 50px;
   display: flex;
@@ -181,4 +190,22 @@ input:checked + .slider:before {
 
 .barData {
   margin-left: 90px;
+}
+
+.rdrDefinedRangesWrapper{
+width: 0px !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .subContainer {
+    flex-wrap: wrap;
+  }
+  .calenderDiv{
+    margin-left: 10%;
+    height: 500px;
+    margin-top:50px;
+  }
+  .barData{
+    margin-left: -10px;
+  }
 }

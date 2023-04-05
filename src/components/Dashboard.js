@@ -285,7 +285,13 @@ export default function Dashboard() {
     <>
       <div className="mainContainer">
         <div className="subContainer">
-          <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
+          <div className="calenderDiv">
+            <DateRangePicker
+              moveRangeOnFirstSelection={false}
+              ranges={[selectionRange]}
+              onChange={handleSelect}
+            />
+          </div>
           <div className="barData">
             <BarChart width={400} height={200} data={barData}>
               <Bar dataKey="impressions_offered" fill="#33aa22" />
@@ -317,7 +323,7 @@ export default function Dashboard() {
               { title: "Impressions Offered", field: "impressions_offered" },
             ]}
             data={tableData}
-            title="Table"
+            title="Data"
             options={{
               sorting: true,
               search: true,
